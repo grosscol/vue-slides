@@ -1,3 +1,9 @@
+---
+author: Display Lab
+title: Demo Slides
+date: 2019-05-21
+---
+
 # First Title
 
 # Second Title
