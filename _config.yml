@@ -1,0 +1,17 @@
+# Jekyll configuration
+# Facilites using github pages which use jekyll to build sites.
+
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+exclude:
+  - readme.md
+  - license
+  - slides/
+  - reveal.js/test
+  - reveal.js/index.html
+  - reveal.js/README.md
+  - reveal.js/bower.json
+  - reveal.js/Gruntfile.js
+  - reveal.js/CONTRIBUTING.md
+  - reveal.js/LICENSE
+  - reveal.js/package.json"
