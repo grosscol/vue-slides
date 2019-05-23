@@ -2,11 +2,11 @@
 
 ## Writing slides
 
-Create entire slide deck as single markdown
+Create entire slide deck (index.html) from markdown files in slides/ directory.
 ```sh
-pandoc -s -t revealjs -o index.html \
- --slide-level=2 -V reveal.js=./reveal.js \
- -V theme=solarized slides/all-in-one.md
+pandoc -t revealjs --template=pandoc-templates/default.revealjs \
+  -o index.html  --slide-level=2 \
+  -V reveal.js=./reveal.js  -V theme=white slides/*.m
 ```
 
 ## Created gh-pages

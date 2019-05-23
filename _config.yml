@@ -8,6 +8,7 @@ exclude:
   - readme.md
   - license
   - slides/
+  - pandoc-templates/
   - reveal.js/test
   - reveal.js/index.html
   - reveal.js/README.md

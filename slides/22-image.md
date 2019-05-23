@@ -8,4 +8,8 @@ date: 2019-05-21
 
 Image content
 
-![top performer](assets/top_perf.svg)
+![](assets/top_perf.svg)
+
+##
+
+![image title](assets/top_perf.svg){ width=250px }
