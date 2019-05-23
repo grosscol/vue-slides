@@ -5,7 +5,7 @@
 Create entire slide deck (index.html) from markdown files in slides/ directory.
 ```sh
 pandoc -t revealjs --template=pandoc-templates/default.revealjs \
-  -o index.html  --slide-level=2 \
+  -o docs/index.html  --slide-level=2 \
   -V reveal.js=./reveal.js  -V theme=white slides/*.m
 ```
 

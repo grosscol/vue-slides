@@ -1,4 +1,2 @@
-# Ignore build artifacts
-
+# Ignore Jekyll's build artifacts
 _site/*
-index.html
