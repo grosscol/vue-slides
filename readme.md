@@ -1,13 +1,12 @@
 # Reveal Slides for Github Pages via Pandoc
 
-slides available at [](https://display-lab.github.io/slides-template)
+slides available at https://display-lab.github.io/slides-template
 
 ## Making a new presentation
 Clone and rename this repository.
 
 ```sh
-git clone --depth=1 --shallow-submodules\
-  --recurse-submodules \
+git clone --shallow-submodules --recurse-submodules \
   https://github.com/display-lab/slides-template.git newname
 ```
 ## Writing slides
@@ -21,7 +20,7 @@ pandoc -t revealjs --template=pandoc-templates/default.revealjs \
 
 ## Publishing to Github Pages
 
-1. Create repo [](https://github.com/new) 
+1. Create repo: https://github.com/new
 1. Set repo as remote
     ```sh
     git remote add origin URL_TO_YOUR_REPO
@@ -39,7 +38,7 @@ pandoc -t revealjs --template=pandoc-templates/default.revealjs \
 ### Pandoc
 Required and used to generate the slides html.
 
-Installation: [](https://pandoc.org/installing.html)
+Installation: https://pandoc.org/installing.html
 
 
 ### Jekyll
@@ -47,7 +46,7 @@ The underlying technology that powers github pages.
 Not required to generate slides,
 but useful for examining how the repo will be processed.
 
-Installation: [](https://jekyllrb.com/docs/installation/)
+Installation: https://jekyllrb.com/docs/installation/
 
 
 
