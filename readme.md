@@ -23,7 +23,7 @@ pandoc -t revealjs --template=pandoc-templates/default.revealjs \
 1. Create repo: https://github.com/new
 1. Set repo as remote
     ```sh
-    git remote add origin URL_TO_YOUR_REPO
+    git remote set-url origin URL_TO_YOUR_REPO
     ```
 1. Push up contents
     ```sh
