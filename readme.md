@@ -2,16 +2,17 @@
 
 slides available at https://display-lab.github.io/slides-template
 
-## Making a new presentation
-Clone and rename this repository.
-
+## Making a New Presentation
+Clone and rename this repository.  Use your desired project name instead of `newname` below:
 ```sh
 git clone --shallow-submodules --recurse-submodules \
   https://github.com/display-lab/slides-template.git newname
 ```
-## Writing slides
+
+## Writing & Building Slides
 
 Create entire slide deck (index.html) from markdown files in slides/ directory.
+Slide will be assembled in alphabetical order by filename.
 ```sh
 pandoc -t revealjs --template=pandoc-templates/default.revealjs \
   -o index.html  --slide-level=2 \
@@ -44,7 +45,7 @@ Installation: https://pandoc.org/installing.html
 ### Jekyll
 The underlying technology that powers github pages.
 Not required to generate slides,
-but useful for examining how the repo will be processed.
+but useful for examining how the github pages branch will be processed.
 
 Installation: https://jekyllrb.com/docs/installation/
 
