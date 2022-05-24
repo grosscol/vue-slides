@@ -1,12 +1,12 @@
 # Reveal Slides for Github Pages via Pandoc
 
-slides available at https://display-lab.github.io/slides-template
+slides available at https://grosscol.github.io/slides-template
 
 ## Making a New Presentation
 Clone and rename this repository.  Use your desired project name instead of `newname` below:
 ```sh
 git clone --shallow-submodules --recurse-submodules \
-  https://github.com/display-lab/slides-template.git newname
+  https://github.com/grosscol/slides-template.git newname
 ```
 
 ## Writing & Building Slides
