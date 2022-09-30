@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="Display Lab">
-  <meta name="dcterms.date" content="2019-05-21">
-  <title>Demo Slides</title>
+  <meta name="author" content="Colin Gross">
+  <meta name="dcterms.date" content="2022-09-30">
+  <title>Freeze 10 Pipeline</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -90,90 +90,202 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Demo Slides</h1>
-  <p class="author">Display Lab</p>
-  <p class="date">2019-05-21</p>
-</section>
-
-<section id="first-title" class="title-slide slide level1">
-<h1>First Title</h1>
-<p>Welcome to the first slide.</p>
-<p>Display Lab</p>
-<p>2019-05-21</p>
-</section>
-
-<section id="second-title" class="title-slide slide level1">
-<h1>Second Title</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae justo eget magna fermentum iaculis.</p>
+  <h1 class="title">Freeze 10 Pipeline</h1>
+  <p class="author">Colin Gross</p>
+  <p class="date">2022-09-30</p>
 </section>
 
 <section>
-<section id="third-title" class="title-slide slide level1">
-<h1>Third Title</h1>
-<p>Tortor pretium viverra suspendisse potenti nullam ac tortor vitae. Nunc mattis enim ut tellus elementum sagittis vitae et.</p>
-</section>
-<section id="sub-1" class="slide level2">
-<h2>3 Sub 1</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">puts</span> <span class="st">&quot;Hello World&quot;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="kw">..</span><span class="dv">10</span>)<span class="at">.each</span><span class="kw">{</span> <span class="kw">|</span>n<span class="kw">|</span> <span class="fu">puts</span> n<span class="kw">+</span><span class="dv">10</span> <span class="kw">}</span></span></code></pre></div>
-<p>Enim nulla aliquet porttitor lacus luctus accumsan. Nulla pellentesque dignissim enim sit amet.</p>
-</section>
-<section id="sub-2" class="slide level2">
-<h2>3 Sub 2</h2>
-<p><del>Auctor neque vitae tempus quam pellentesque.</del></p>
-<h3 id="scelerisque-viverra-mauris-in-aliquam-sem-fringilla.">Scelerisque viverra mauris in aliquam sem fringilla.</h3>
-<p>Donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum.</p>
-</section>
-<section id="sub-3" class="slide level2">
-<h2>3 Sub 3</h2>
-<p><em>Massa id neque aliquam vestibulum morbi blandit cursus risus at.</em> <em>Vestibulum sed arcu non odio euismod.</em> <strong>Ut tellus elementum sagittis vitae et leo duis ut.</strong></p>
-</section></section>
-<section id="fourth-title" class="title-slide slide level1">
-<h1>Fourth Title</h1>
-<ul>
-<li>Duis at tellus at urna condimentum mattis pellentesque.</li>
-<li>Morbi leo urna molestie at elementum eu facilisis sed.</li>
-<li>Vel elit scelerisque mauris pellentesque pulvinar pellentesque.</li>
-</ul>
-</section>
-
 <section id="section" class="title-slide slide level1">
 <h1></h1>
-<ol type="1">
-<li>Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus.</li>
-<li>Curabitur vitae nunc sed velit dignissim sodales ut eu.</li>
-<li>Urna nec tincidunt praesent semper feugiat nibh sed.</li>
-</ol>
+<h3>
+BRAVO Data Prep
+</h3>
+<p>Repo of tools, workflows, and hacks.</p>
+<p><a href="https://github.com/statgen/bravo_data_prep">github.com/statgen/bravo_data_prep</a></p>
+<pre><code>workspace/data_prep/
+├── hacks
+├── README.md
+├── tools
+└── workflows</code></pre>
 </section>
-
-<section id="sixth-title" class="title-slide slide level1">
-<h1>Sixth Title</h1>
+<section id="tools" class="slide level2">
+<h2>Tools</h2>
+<p>Purpose built applications to perform data processing steps</p>
 <ul>
-<li>Suspendisse potenti nullam ac tortor vitae.</li>
-<li>Congue quisque egestas diam in arcu cursus euismod.</li>
-<li>Consectetur adipiscing elit duis tristique sollicitudin.</li>
+<li>python tools
+<ul>
+<li>python3</li>
+<li>requires pysam</li>
+</ul></li>
+<li>cpp tools
+<ul>
+<li>cget for dependencies</li>
+<li>builds htslib</li>
+</ul></li>
+</ul>
+</section>
+<section id="workflows" class="slide level2">
+<h2>Workflows</h2>
+<p>Orchestrate the processing of VCF and CRAM data.</p>
+<ul>
+<li>coverage</li>
+<li>process_vcf</li>
+<li>sequences</li>
+</ul>
+</section>
+<section id="hacks" class="slide level2">
+<h2>Hacks</h2>
+<ul>
+<li>One off scripts and experimenting.</li>
+<li>May be useful in future development.</li>
+<li>Provide some history otherwise excluded from the git.</li>
+<li>Clearly dilineated in directory</li>
+<li>Described by readme.md</li>
+</ul>
+<pre><code>data_prep/hacks/
+├── 198_samples.tsv
+├── 198_samples.txt
+├── make_198_sample_links.sh
+├── make_198_samples_tsv.sh
+├── readme.md</code></pre>
+</section></section>
+<section id="section-1" class="title-slide slide level1">
+<h1></h1>
+<h3>
+Inputs
+</h3>
+<ul>
+<li>VCFs with DP &amp; GQ fields.</li>
+<li>VCFs with genotypes only.</li>
+<li>CRAM files</li>
+<li>samples_list.txt</li>
+<li>samples_list.tsv</li>
 </ul>
 </section>
 
 <section>
-<section id="seventh-title" class="title-slide slide level1">
-<h1>Seventh Title</h1>
-<p>Image content</p>
-<p><img data-src="assets/top_perf.svg" /></p>
+<section id="section-2" class="title-slide slide level1">
+<h1></h1>
+<h3>
+Outputs
+</h3>
+<ul>
+<li>Files to be loaded into MongoDB
+<ul>
+<li>QC_Metrics</li>
+<li>VCFs</li>
+</ul></li>
+<li>Files to be accessed at runtime
+<ul>
+<li>CRAMs</li>
+<li>Coverage depth summaries</li>
+</ul></li>
+</ul>
 </section>
-<section id="section-1" class="slide level2">
-<h2></h2>
-<figure>
-<img data-src="assets/top_perf.svg" width="250" alt="image title" /><figcaption aria-hidden="true">image title</figcaption>
-</figure>
+<section id="basis-data" class="slide level2">
+<h2>Basis Data</h2>
+<p>Produced by process_vcf workflow</p>
+<pre><code>/bravo/data/basis/
+├── qc_metrics
+│   └── metrics.json.gz
+├── reference
+│   ├── canonical_transcripts.tsv.gz
+│   ├── gencode.v38.annotation.gtf.gz
+│   ├── hgcn_genenames.tsv.gz
+│   └── omim_ensembl_refs.tsv.gz
+└── vcfs
+    ├── chr11.bravo.vcf.gz
+    └── chr12.bravo.vcf.gz</code></pre>
+</section>
+<section id="runtime-data" class="slide level2">
+<h2>Runtime Data</h2>
+<p>Produced by coverage and sequences workflows</p>
+<pre><code>/bravo/data/runtime
+├── cache
+├── coverage
+│   ├── bin_0.25
+│   │   ├── chr11.bin_0.25.tsv.gz
+│   │   ├── chr11.bin_0.25.tsv.gz.tbi
+│   │   ├── chr12.bin_0.25.tsv.gz
+│   │   └── chr12.bin_0.25.tsv.gz.tbi
+│   ├── bin_0.50 ...
+│   ├── bin_0.75 ...
+│   ├── bin_1.00 ...
+│   └── full ...
+├── crams
+│   ├── sequences ...
+│   ├── variant_map.tsv.gz
+│   └── variant_map.tsv.gz.tbi
+└── reference
+    ├── hs38DH.fa
+    └── hs38DH.fa.fai</code></pre>
 </section></section>
-<section id="seventh-title-1" class="title-slide slide level1">
-<h1>Seventh Title</h1>
-<p>Incremental fragments</p>
-<p><span class="fragment"> stuff </span></p>
-<p><span class="fragment"> other </span></p>
-<p><span class="fragment"> stuff </span></p>
+<section>
+<section id="section-3" class="title-slide slide level1">
+<h1></h1>
+<h3>
+Scaling
+</h3>
+<p>Add more nodes when needed until available queue is running or maximum nodes provisioned.</p>
 </section>
+<section id="nextflow-config" class="slide level2">
+<h2>Nextflow Config</h2>
+<p>Nextflow config handles limit of jobs to enqueue at a time.</p>
+<pre><code>executor {
+  $slurm {
+    queueSize = 1000
+    jobName = { &quot;bravo_coverage&quot; }
+  }</code></pre>
+</section>
+<section id="slurm-config" class="slide level2">
+<h2>SLURM Config</h2>
+<p>Slurm on GCP handles limit of nodes to spin up.</p>
+<pre><code>partitions = [
+  { name                 = &quot;highcpu&quot;
+    machine_type         = &quot;n1-highcpu-8&quot;
+    static_node_count    = 0
+    max_node_count       = 25
+  },
+  { name                 = &quot;highmem&quot;
+    machine_type         = &quot;n2-highmem-4&quot;
+    static_node_count    = 0
+    max_node_count       = 52
+  }</code></pre>
+</section></section>
+<section>
+<section id="section-4" class="title-slide slide level1">
+<h1></h1>
+<h3>
+Parallel When Possible
+</h3>
+<p>Refactored depth count aggregation of coverage workflow to use successive rounds of concurrent reads.</p>
+</section>
+<section id="fill-pipes" class="slide level2">
+<h2>Fill pipes</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create pipes for tabix reading</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">PIPES</span><span class="op">=</span><span class="va">()</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="va">PIPE_COUNT</span><span class="op">=</span>0</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> INFILE <span class="kw">in</span> <span class="dt">\$</span>{INFILES[@]}</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="va">PIPE_NAME</span><span class="op">=</span>pipe_<span class="dt">\$</span>{PIPE_COUNT}</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mkfifo</span> <span class="dt">\$</span>{PIPE_NAME}</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="va">PIPES</span><span class="op">+=</span><span class="va">(</span> <span class="dt">\$</span>{PIPE_NAME} <span class="va">)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Start reading depth file into pipe</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">(</span><span class="ex">tabix</span> <span class="dt">\$</span>{INFILE} <span class="va">${chromosome}</span>:<span class="dt">\$</span>{POS}-<span class="dt">\$</span>{END} <span class="op">&gt;</span> <span class="dt">\$</span>{PIPE_NAME}<span class="kw">)</span> <span class="kw">&amp;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">let</span> <span class="st">&quot;PIPE_COUNT = PIPE_COUNT + 1&quot;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
+</section>
+<section id="read-from-pipes" class="slide level2">
+<h2>Read from pipes</h2>
+<p><a href="https://github.com/johnkerl/miller">mlr</a> is a command line data processor for tabular data formats. Here it’s being used to concatenate the depth counts from <code>chr\tpos\tdepth</code> files. Since <code>mlr</code> handles multiple files at once using an array of pipes increases throughput.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate depths from depth file chunks</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mlr</span> <span class="at">-N</span> <span class="at">--tsv</span> <span class="st">&#39;nest&#39;</span> <span class="at">--ivar</span> <span class="st">&quot;;&quot;</span> <span class="at">-f</span> 3 <span class="dt">\$</span>{PIPES[@]} <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span> <span class="at">--numeric-sort</span> <span class="at">--key</span><span class="op">=</span>2 <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">bgzip</span> <span class="op">&gt;&gt;</span> <span class="va">${result_file}</span></span></code></pre></div>
+</section></section>
     </div>
   </div>
 

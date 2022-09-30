@@ -1,21 +1,39 @@
 ---
-author: Display Lab
-title: Demo Slides
-date: 2019-05-21
+author: Colin Gross
+title: Freeze 10 Pipeline
+date: 2022-09-30
 ---
 
-# Fourth Title
-- Duis at tellus at urna condimentum mattis pellentesque. 
-- Morbi leo urna molestie at elementum eu facilisis sed. 
-- Vel elit scelerisque mauris pellentesque pulvinar pellentesque. 
-
 #
-1. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus. 
-1. Curabitur vitae nunc sed velit dignissim sodales ut eu. 
-1. Urna nec tincidunt praesent semper feugiat nibh sed.
+<h3>Parallel When Possible</h3>
+Refactored depth count aggregation of coverage workflow to use successive rounds of concurrent reads.
 
-# Sixth Title
+## Fill pipes
+```sh
+# Create pipes for tabix reading
+PIPES=()
+PIPE_COUNT=0
+for INFILE in \${INFILES[@]}
+do
+  PIPE_NAME=pipe_\${PIPE_COUNT}
+  mkfifo \${PIPE_NAME}
+  PIPES+=( \${PIPE_NAME} )
 
-- Suspendisse potenti nullam ac tortor vitae. 
-- Congue quisque egestas diam in arcu cursus euismod. 
-- Consectetur adipiscing elit duis tristique sollicitudin. 
+  # Start reading depth file into pipe
+  (tabix \${INFILE} ${chromosome}:\${POS}-\${END} > \${PIPE_NAME}) &
+
+  let "PIPE_COUNT = PIPE_COUNT + 1"
+done
+```
+
+## Read from pipes
+- [mlr](https://github.com/johnkerl/miller) is a tool for tabular data.
+- Here it's concatenating the depth counts from `chr\tpos\tdepth` files.
+- `mlr` handles multiple files increasing throughput.
+
+```sh
+# Aggregate depths from depth file chunks
+mlr -N --tsv 'nest' --ivar ";" -f 3 \${PIPES[@]} |\
+  sort --numeric-sort --key=2 |\
+  bgzip >> ${result_file}
+```

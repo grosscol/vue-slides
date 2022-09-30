@@ -1,31 +1,37 @@
 ---
-author: Display Lab
-title: Demo Slides
-date: 2019-05-21
+author: Colin Gross
+title: Freeze 10 Pipeline
+date: 2022-09-30
 ---
 
-# Third Title
-Tortor pretium viverra suspendisse potenti nullam ac tortor vitae. 
-Nunc mattis enim ut tellus elementum sagittis vitae et. 
+#
+<h3>Scaling</h3>
+Add more nodes when needed until available queue is running or maximum nodes provisioned.
 
-## 3 Sub 1
-```ruby
-puts "Hello World"
-(1..10).each{ |n| puts n+10 }
+## Nextflow Config
+Nextflow config handles limit of jobs to enqueue at a time.
+
+```
+executor {
+  $slurm {
+    queueSize = 1000
+    jobName = { "bravo_coverage" }
+  }
 ```
 
-Enim nulla aliquet porttitor lacus luctus accumsan. 
-Nulla pellentesque dignissim enim sit amet. 
+## SLURM Config
+Slurm on GCP handles limit of nodes to spin up.
 
-## 3 Sub 2
-~~Auctor neque vitae tempus quam pellentesque.~~
-
-### Scelerisque viverra mauris in aliquam sem fringilla.
-
-Donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. 
-
-## 3 Sub 3
-*Massa id neque aliquam vestibulum morbi blandit cursus risus at.*
-_Vestibulum sed arcu non odio euismod._
-**Ut tellus elementum sagittis vitae et leo duis ut.**
-
+```
+partitions = [
+  { name                 = "highcpu"
+    machine_type         = "n1-highcpu-8"
+    static_node_count    = 0
+    max_node_count       = 25
+  },
+  { name                 = "highmem"
+    machine_type         = "n2-highmem-4"
+    static_node_count    = 0
+    max_node_count       = 52
+  }
+```
