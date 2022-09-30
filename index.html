@@ -280,7 +280,11 @@ Parallel When Possible
 </section>
 <section id="read-from-pipes" class="slide level2">
 <h2>Read from pipes</h2>
-<p><a href="https://github.com/johnkerl/miller">mlr</a> is a command line data processor for tabular data formats. Here it’s being used to concatenate the depth counts from <code>chr\tpos\tdepth</code> files. Since <code>mlr</code> handles multiple files at once using an array of pipes increases throughput.</p>
+<ul>
+<li><a href="https://github.com/johnkerl/miller">mlr</a> is a tool for tabular data.</li>
+<li>Here it’s concatenating the depth counts from <code>chr\tpos\tdepth</code> files.</li>
+<li><code>mlr</code> handles multiple files increasing throughput.</li>
+</ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate depths from depth file chunks</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mlr</span> <span class="at">-N</span> <span class="at">--tsv</span> <span class="st">&#39;nest&#39;</span> <span class="at">--ivar</span> <span class="st">&quot;;&quot;</span> <span class="at">-f</span> 3 <span class="dt">\$</span>{PIPES[@]} <span class="kw">|</span><span class="dt">\</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span> <span class="at">--numeric-sort</span> <span class="at">--key</span><span class="op">=</span>2 <span class="kw">|</span><span class="dt">\</span></span>
