@@ -13,14 +13,14 @@ Repo of tools, workflows, and hacks.
 
 ```
 workspace/data_prep/
-├── hacks
+├── hacks/
 ├── README.md
-├── tools
-└── workflows
+├── tools/
+└── workflows/
 ```
 
 ## Tools
-Purpose built applications to perform data processing steps
+Purpose built applications for processing steps.
 
 - python tools
     - python3
@@ -31,7 +31,7 @@ Purpose built applications to perform data processing steps
     - builds htslib
 
 ## Workflows
-Orchestrate the processing of VCF and CRAM data.
+Nextflow to orchestrate processing of VCF and CRAM data.
 
 - coverage
 - process\_vcf
@@ -39,11 +39,11 @@ Orchestrate the processing of VCF and CRAM data.
 
 ## Hacks
 
+- Clearly dilineated in a directory.
 - One off scripts and experimenting.
 - May be useful in future development.
-- Provide some history otherwise excluded from the git.
-- Clearly dilineated in directory
-- Described by readme.md
+- Provide some history otherwise excluded from git.
+- Described by `hacks/readme.md`.
 
 ```
 data_prep/hacks/
@@ -59,9 +59,11 @@ data_prep/hacks/
 <h3>Inputs</h3>
 - VCFs with DP & GQ fields.
 - VCFs with genotypes only. 
+- VCFs with sites only.
 - CRAM files
 - samples\_list.txt
-- samples\_list.tsv
+- samples\_list.txt (not the same as above)
+- samples\_list.tsv (also not the same)
 
 # 
 <h3>Outputs</h3>
