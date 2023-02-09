@@ -9,16 +9,6 @@ git clone --shallow-submodules --recurse-submodules \
   https://github.com/grosscol/slides-template.git newname
 ```
 
-## Writing & Building Slides
-
-Create entire slide deck (index.html) from markdown files in slides/ directory.
-Slide will be assembled in alphabetical order by filename.
-```sh
-pandoc -t revealjs --template=pandoc-templates/default.revealjs \
-  -o index.html  --slide-level=2 \
-  -V reveal.js=./reveal.js  -V theme=white slides/*.md
-```
-
 ## Publishing to Github Pages
 
 1. Create repo: https://github.com/new
@@ -33,8 +23,21 @@ pandoc -t revealjs --template=pandoc-templates/default.revealjs \
 1. Change repository settings on github to serve Github Pages from gh-branch.
 [more info](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/)
 
+## Writing & Building Slides
 
-## Dependencies
+Create entire slide deck (index.html) from markdown files in slides/ directory.
+Slide will be assembled in alphabetical order by filename.
+```sh
+pandoc -t revealjs --template=pandoc-templates/default.revealjs \
+  -o index.html  --slide-level=2 \
+  -V reveal.js=./reveal.js  -V theme=white slides/*.md
+```
+
+## Compiling as you work
+
+```sh
+ls slides/*.md | entr ./build_slides.sh
+```
 
 ### Pandoc
 Required and used to generate the slides html.
