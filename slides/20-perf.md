@@ -44,6 +44,7 @@ nf-variants_by_sample_(13)        RUNNING
 
 ## Nextflow trace & report
 **Post run** breakdown of process cpu and memory use.
+
 - Report is all in one html visual report. 
 - The trace contains the underlying data in csv.
 
