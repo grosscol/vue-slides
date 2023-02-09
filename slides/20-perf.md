@@ -1,90 +1,54 @@
 ---
 author: Colin Gross
 title: Freeze 10 Pipeline
-date: 2022-09-30
+date: 2023-02-09
 ---
 
-#
-<h3>Performance</h3>
-Refactored depth count aggregation of coverage workflow to use successive rounds of concurrent reads.
+# Montitoring 
 
-## Aggregate Depths
-Aggregation depth counts needs to read all the depth files and concatenate rows.
-Individual depth files that look like:
+- SLURM tools
+- Nextflow trace & reports
+- GCP dashboards and gcloud tool
+
+## SLURM: tools squeue
+Useful for seeing processes as they are running
+
 ```txt
-chr11 52230001  20
-chr11 52230002  14
-chr11 52230003  22
-```
-to single concatenated depth file like:
-```txt
-chr11 52230001  20;18;29;18
-chr11 52230002  14;21;24;24 
-chr11 52230003  22;21;22;12
+JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+   33   highcpu nf-varia grosscol  R    7:44:37      1 dpclust-compute-1-2
+   34   highcpu nf-varia grosscol  R    7:17:47      1 dpclust-compute-1-2
+   35   highcpu nf-varia grosscol  R    5:52:26      1 dpclust-compute-1-1
+   36   highcpu nf-varia grosscol  R    5:35:26      1 dpclust-compute-1-1
+   37   highcpu nf-varia grosscol  R    2:14:02      1 dpclust-compute-1-1
+   38   highcpu nf-varia grosscol  R      10:52      1 dpclust-compute-1-1
 ```
 
-## Parallel Reading with Pipes
-Convenient method of reading four or five files at a time.
-```sh
-# Create pipes for tabix reading
-PIPES=()
-PIPE_COUNT=0
-
-for INFILE in \${INFILES[@]}
-do
-  PIPE_NAME=pipe_\${PIPE_COUNT}
-  mkfifo \${PIPE_NAME}
-  PIPES+=( \${PIPE_NAME} )
-
-  # Start reading depth file into pipe
-  (tabix \${INFILE} ${chromosome}:\${POS}-\${END} > \${PIPE_NAME}) &
-
-  let "PIPE_COUNT = PIPE_COUNT + 1"
-done
-```
-
-## Aggregate multiple files
-- [mlr](https://github.com/johnkerl/miller) is a tool for tabular data.
-- Here it's concatenating the depth counts from `chr\tpos\tdepth` files.
-- `mlr` handles multiple files increasing throughput.
-- This approach can aggregate prev aggregated files.
+## SLURM: tools sacct
+Useful for looking at completed processes
 
 ```sh
-# Aggregate depths from depth file chunks
-mlr -N --tsv 'nest' --ivar ";" -f 3 \${PIPES[@]} |\
-  sort --numeric-sort --key=2 |\
-  bgzip >> ${result_file}
+sacct -o JobName%26,State%15
+```
+```txt
+nf-variants_by_sample_(10)         FAILED
+nf-variants_by_sample_(12)      COMPLETED
+nf-variants_by_sample_(17)  OUT_OF_MEMORY
+nf-variants_by_sample_(13)        RUNNING
 ```
 
-## Repeat Aggregation Until Done.
-Nextflow's DSL 1.0 doesn't support looping.
+## GCP Dashboard
 
-This does **not** work:
-```
-process aggregate_depths_loop {
-  input:
-  tuple file(depth_files) from agg_channel
+![mem_use_24](https://user-images.githubusercontent.com/1520508/217684334-07c306ab-b0cb-4ed2-ae17-c12c7f202e07.png)
 
-  output:
-  tuple file("${chrom}_${task.index}.tsv.gz") into agg_channel
+![cpu_use_24h](https://user-images.githubusercontent.com/1520508/217684343-67220dc5-064d-4b59-a268-f66008392e17.png)
 
-  when: aggregation_complete != true
-```
+## Nextflow trace & report
+**Post run** breakdown of process cpu and memory use.
+- Report is all in one html visual report. 
+- The trace contains the underlying data in csv.
 
-## Unrolled loop
-- Handles limited quantity of input files
-- Makes workflow script longer & repetative
+- [initial coverage run](first_cov_run.html)
+- [tuned vcf run](tuned_vcf_run.html)
 
-```
-process aggregate_depths_rnd_1 {
-  input:  file(depth_files) from pileups
-  output: file("${chrom}_rnd_1_${task.index}.tsv.gz") into agg_rnd_1
 
-process aggregate_depths_rnd_2 {
-  input:  file(depth_files) from agg_rnd_1
-  output: file("${chrom}_rnd_1_${task.index}.tsv.gz") into agg_rnd_2
 
-process aggregate_depths_rnd_3 {
-  input:  file(depth_files) from agg_rnd_2
-  output: file("${chrom}_rnd_1_${task.index}.tsv.gz") into agg_rnd_3
-```

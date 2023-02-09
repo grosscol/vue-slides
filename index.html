@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Colin Gross">
-  <meta name="dcterms.date" content="2022-09-30">
+  <meta name="dcterms.date" content="2023-02-09">
   <title>Freeze 10 Pipeline</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,6 +12,12 @@
   <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
   <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
   <style>
+    /* Hack to override reveal styling */
+    :root:root {
+      --r-heading1-size: 2.2em;
+      --r-heading2-size: 1.8em;
+      --r-heading3-size: 1.5em;
+    }
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -92,260 +98,123 @@
 <section id="title-slide">
   <h1 class="title">Freeze 10 Pipeline</h1>
   <p class="author">Colin Gross</p>
-  <p class="date">2022-09-30</p>
+  <p class="date">2023-02-09</p>
 </section>
 
-<section>
-<section id="section" class="title-slide slide level1">
-<h1></h1>
-<h3>
-BRAVO Data Prep
-</h3>
-<p>Repo of tools, workflows, and hacks.</p>
-<p><a href="https://github.com/statgen/bravo_data_prep">github.com/statgen/bravo_data_prep</a></p>
-<pre><code>workspace/data_prep/
-├── hacks/
-├── README.md
-├── tools/
-└── workflows/</code></pre>
-</section>
-<section id="tools" class="slide level2">
-<h2>Tools</h2>
-<p>Purpose built applications for processing steps.</p>
+<section id="sizing-nodes-processes" class="title-slide slide level1">
+<h1>Sizing Nodes &amp; Processes</h1>
+<p>Rough evaluation and scaling of:</p>
 <ul>
-<li>python tools
-<ul>
-<li>python3</li>
-<li>requires pysam</li>
-</ul></li>
-<li>cpp tools
-<ul>
-<li>cget for dependencies</li>
-<li>builds htslib</li>
-</ul></li>
-</ul>
-</section>
-<section id="workflows" class="slide level2">
-<h2>Workflows</h2>
-<p>Nextflow to orchestrate processing of VCF and CRAM data.</p>
-<ul>
-<li>coverage</li>
-<li>process_vcf</li>
-<li>sequences</li>
-</ul>
-</section>
-<section id="hacks" class="slide level2">
-<h2>Hacks</h2>
-<ul>
-<li>Clearly dilineated in a directory.</li>
-<li>One off scripts and experimenting.</li>
-<li>May be useful in future development.</li>
-<li>Provide some history otherwise excluded from git.</li>
-<li>Described by <code>hacks/readme.md</code>.</li>
-</ul>
-<pre><code>data_prep/hacks/
-├── 198_samples.tsv
-├── 198_samples.txt
-├── make_198_sample_links.sh
-├── make_198_samples_tsv.sh
-├── readme.md</code></pre>
-</section></section>
-<section id="section-1" class="title-slide slide level1">
-<h1></h1>
-<h3>
-Inputs
-</h3>
-<ul>
-<li>VCFs with DP &amp; GQ fields.</li>
-<li>VCFs with genotypes only.</li>
-<li>VCFs with sites only.</li>
-<li>CRAM files</li>
-<li>samples_list.txt</li>
-<li>samples_list.txt (not the same as above)</li>
-<li>samples_list.tsv (also not the same)</li>
+<li>Nextflow processes</li>
+<li>SLURM partitions</li>
+<li>GCP instances.</li>
 </ul>
 </section>
 
 <section>
-<section id="section-2" class="title-slide slide level1">
-<h1></h1>
-<h3>
-Outputs
-</h3>
+<section id="available-ajustments" class="title-slide slide level1">
+<h1>Available ajustments</h1>
 <ul>
-<li>Files to be loaded into MongoDB
-<ul>
-<li>QC_Metrics</li>
-<li>VCFs</li>
-</ul></li>
-<li>Files to be accessed at runtime
-<ul>
-<li>CRAMs</li>
-<li>Coverage depth summaries</li>
-</ul></li>
+<li>SLURM</li>
+<li>Nextflow</li>
+<li>GCP</li>
 </ul>
 </section>
-<section id="basis-data" class="slide level2">
-<h2>Basis Data</h2>
-<p>Produced by process_vcf workflow</p>
-<pre><code>/bravo/data/basis/
-├── qc_metrics
-│   └── metrics.json.gz
-├── reference
-│   ├── canonical_transcripts.tsv.gz
-│   ├── gencode.v38.annotation.gtf.gz
-│   ├── hgcn_genenames.tsv.gz
-│   └── omim_ensembl_refs.tsv.gz
-└── vcfs
-    ├── chr11.bravo.vcf.gz
-    └── chr12.bravo.vcf.gz</code></pre>
+<section id="knobs-slurm-partitions" class="slide level2">
+<h2>Knobs: SLURM partitions</h2>
+<ul>
+<li>node quantity</li>
+<li>node type</li>
+</ul>
+<pre class="tf"><code>  partitions = [
+    { name                 = &quot;highcpu&quot;
+      machine_type         = &quot;n1-highcpu-8&quot;
+      static_node_count    = 0
+      max_node_count       = 40 },
+    { name                 = &quot;highmem&quot;
+      machine_type         = &quot;n2-highmem-4&quot;
+      static_node_count    = 0
+      max_node_count       = 80 },</code></pre>
 </section>
-<section id="runtime-data" class="slide level2">
-<h2>Runtime Data</h2>
-<p>Produced by coverage and sequences workflows</p>
-<pre><code>/bravo/data/runtime
-├── cache
-├── coverage
-│   ├── bin_0.25
-│   │   ├── chr11.bin_0.25.tsv.gz
-│   │   ├── chr11.bin_0.25.tsv.gz.tbi
-│   │   ├── chr12.bin_0.25.tsv.gz
-│   │   └── chr12.bin_0.25.tsv.gz.tbi
-│   ├── bin_0.50 ...
-│   ├── bin_0.75 ...
-│   ├── bin_1.00 ...
-│   └── full ...
-├── crams
-│   ├── sequences ...
-│   ├── variant_map.tsv.gz
-│   └── variant_map.tsv.gz.tbi
-└── reference
-    ├── hs38DH.fa
-    └── hs38DH.fa.fai</code></pre>
+<section id="knobs-nextflow" class="slide level2">
+<h2>Knobs: Nextflow</h2>
+<ul>
+<li>Limit much memory and cpu</li>
+<li>Which queue of nodes to run in</li>
+</ul>
+<pre class="nf"><code>    withLabel: highmem {
+        queue = &quot;highmem&quot;
+        memory = &quot;16 GB&quot;
+        cpus = 2
+    }
+
+    withLabel: highcpu {
+        queue = &quot;highcpu&quot;
+        memory = &quot;0.75 GB&quot;
+        cpus = 1
+    }</code></pre>
+</section>
+<section id="knobs-gcp-instances." class="slide level2">
+<h2>Knobs: GCP instances.</h2>
+<p>Machine vCPUs Memory</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n1-standard-4  4  vCPUs   15   GiB</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n1-highmem-8   8  vCPUs   52   GiB</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>n1-highcpu-16  16 vCPUs   14.4 GiB</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>c2d-highcpu-8  8  vCPUs   16   GiB</span></code></pre></div>
 </section></section>
 <section>
-<section id="section-3" class="title-slide slide level1">
-<h1></h1>
-<h3>
-Scaling
-</h3>
-<p>Add more nodes when needed until available queue is running or maximum nodes provisioned.</p>
-</section>
-<section id="nextflow-config" class="slide level2">
-<h2>Nextflow Config</h2>
-<p>Nextflow config handles limit of jobs to enqueue at a time.</p>
-<pre><code>executor {
-  $slurm {
-    queueSize = 1000
-    jobName = { &quot;bravo_coverage&quot; }
-  }</code></pre>
-</section>
-<section id="slurm-config" class="slide level2">
-<h2>SLURM Config</h2>
-<p>Slurm on GCP handles limit of nodes to spin up.</p>
-<pre><code>partitions = [
-  { name                 = &quot;highcpu&quot;
-    machine_type         = &quot;n1-highcpu-8&quot;
-    static_node_count    = 0
-    max_node_count       = 25
-  },
-  { name                 = &quot;highmem&quot;
-    machine_type         = &quot;n2-highmem-4&quot;
-    static_node_count    = 0
-    max_node_count       = 52
-  }</code></pre>
-</section></section>
-<section>
-<section id="section-4" class="title-slide slide level1">
-<h1></h1>
-<h3>
-Performance
-</h3>
-<p>Refactored depth count aggregation of coverage workflow to use successive rounds of concurrent reads.</p>
-</section>
-<section id="aggregate-depths" class="slide level2">
-<h2>Aggregate Depths</h2>
-<p>Aggregation depth counts needs to read all the depth files and concatenate rows. Individual depth files that look like:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>chr11 52230001  20</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>chr11 52230002  14</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>chr11 52230003  22</span></code></pre></div>
-<p>to single concatenated depth file like:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>chr11 52230001  20;18;29;18</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>chr11 52230002  14;21;24;24 </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>chr11 52230003  22;21;22;12</span></code></pre></div>
-</section>
-<section id="parallel-reading-with-pipes" class="slide level2">
-<h2>Parallel Reading with Pipes</h2>
-<p>Convenient method of reading four or five files at a time.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create pipes for tabix reading</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">PIPES</span><span class="op">=</span><span class="va">()</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="va">PIPE_COUNT</span><span class="op">=</span>0</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> INFILE <span class="kw">in</span> <span class="dt">\$</span>{INFILES[@]}</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="va">PIPE_NAME</span><span class="op">=</span>pipe_<span class="dt">\$</span>{PIPE_COUNT}</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mkfifo</span> <span class="dt">\$</span>{PIPE_NAME}</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">PIPES</span><span class="op">+=</span><span class="va">(</span> <span class="dt">\$</span>{PIPE_NAME} <span class="va">)</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Start reading depth file into pipe</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">(</span><span class="ex">tabix</span> <span class="dt">\$</span>{INFILE} <span class="va">${chromosome}</span>:<span class="dt">\$</span>{POS}-<span class="dt">\$</span>{END} <span class="op">&gt;</span> <span class="dt">\$</span>{PIPE_NAME}<span class="kw">)</span> <span class="kw">&amp;</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="bu">let</span> <span class="st">&quot;PIPE_COUNT = PIPE_COUNT + 1&quot;</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
-</section>
-<section id="aggregate-multiple-files" class="slide level2">
-<h2>Aggregate multiple files</h2>
+<section id="montitoring" class="title-slide slide level1">
+<h1>Montitoring</h1>
 <ul>
-<li><a href="https://github.com/johnkerl/miller">mlr</a> is a tool for tabular data.</li>
-<li>Here it’s concatenating the depth counts from <code>chr\tpos\tdepth</code> files.</li>
-<li><code>mlr</code> handles multiple files increasing throughput.</li>
-<li>This approach can aggregate prev aggregated files.</li>
+<li>SLURM tools</li>
+<li>Nextflow trace &amp; reports</li>
+<li>GCP dashboards and gcloud tool</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate depths from depth file chunks</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mlr</span> <span class="at">-N</span> <span class="at">--tsv</span> <span class="st">&#39;nest&#39;</span> <span class="at">--ivar</span> <span class="st">&quot;;&quot;</span> <span class="at">-f</span> 3 <span class="dt">\$</span>{PIPES[@]} <span class="kw">|</span><span class="dt">\</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span> <span class="at">--numeric-sort</span> <span class="at">--key</span><span class="op">=</span>2 <span class="kw">|</span><span class="dt">\</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">bgzip</span> <span class="op">&gt;&gt;</span> <span class="va">${result_file}</span></span></code></pre></div>
 </section>
-<section id="repeat-aggregation-until-done." class="slide level2">
-<h2>Repeat Aggregation Until Done.</h2>
-<p>Nextflow’s DSL 1.0 doesn’t support looping.</p>
-<p>This does <strong>not</strong> work:</p>
-<pre><code>process aggregate_depths_loop {
-  input:
-  tuple file(depth_files) from agg_channel
-
-  output:
-  tuple file(&quot;${chrom}_${task.index}.tsv.gz&quot;) into agg_channel
-
-  when: aggregation_complete != true</code></pre>
+<section id="slurm-tools-squeue" class="slide level2">
+<h2>SLURM: tools squeue</h2>
+<p>Useful for seeing processes as they are running</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>   33   highcpu nf-varia grosscol  R    7:44:37      1 dpclust-compute-1-2</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>   34   highcpu nf-varia grosscol  R    7:17:47      1 dpclust-compute-1-2</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>   35   highcpu nf-varia grosscol  R    5:52:26      1 dpclust-compute-1-1</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>   36   highcpu nf-varia grosscol  R    5:35:26      1 dpclust-compute-1-1</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>   37   highcpu nf-varia grosscol  R    2:14:02      1 dpclust-compute-1-1</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>   38   highcpu nf-varia grosscol  R      10:52      1 dpclust-compute-1-1</span></code></pre></div>
 </section>
-<section id="unrolled-loop" class="slide level2">
-<h2>Unrolled loop</h2>
+<section id="slurm-tools-sacct" class="slide level2">
+<h2>SLURM: tools sacct</h2>
+<p>Useful for looking at completed processes</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-o</span> JobName%26,State%15</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nf-variants_by_sample_(10)         FAILED</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>nf-variants_by_sample_(12)      COMPLETED</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>nf-variants_by_sample_(17)  OUT_OF_MEMORY</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>nf-variants_by_sample_(13)        RUNNING</span></code></pre></div>
+</section>
+<section id="gcp-dashboard" class="slide level2">
+<h2>GCP Dashboard</h2>
+<figure>
+<img data-src="https://user-images.githubusercontent.com/1520508/217684334-07c306ab-b0cb-4ed2-ae17-c12c7f202e07.png" alt="mem_use_24" /><figcaption aria-hidden="true">mem_use_24</figcaption>
+</figure>
+<figure>
+<img data-src="https://user-images.githubusercontent.com/1520508/217684343-67220dc5-064d-4b59-a268-f66008392e17.png" alt="cpu_use_24h" /><figcaption aria-hidden="true">cpu_use_24h</figcaption>
+</figure>
+</section>
+<section id="nextflow-trace-report" class="slide level2">
+<h2>Nextflow trace &amp; report</h2>
+<p><strong>Post run</strong> breakdown of process cpu and memory use. - Report is all in one html visual report. - The trace contains the underlying data in csv.</p>
 <ul>
-<li>Handles limited quantity of input files</li>
-<li>Makes workflow script longer &amp; repetative</li>
+<li><a href="first_cov_run.html">initial coverage run</a></li>
+<li><a href="tuned_vcf_run.html">tuned vcf run</a></li>
 </ul>
-<pre><code>process aggregate_depths_rnd_1 {
-  input:  file(depth_files) from pileups
-  output: file(&quot;${chrom}_rnd_1_${task.index}.tsv.gz&quot;) into agg_rnd_1
-
-process aggregate_depths_rnd_2 {
-  input:  file(depth_files) from agg_rnd_1
-  output: file(&quot;${chrom}_rnd_1_${task.index}.tsv.gz&quot;) into agg_rnd_2
-
-process aggregate_depths_rnd_3 {
-  input:  file(depth_files) from agg_rnd_2
-  output: file(&quot;${chrom}_rnd_1_${task.index}.tsv.gz&quot;) into agg_rnd_3</code></pre>
 </section></section>
-<section id="section-5" class="title-slide slide level1">
-<h1></h1>
-<h3>
-Runtimes
-</h3>
-<p>chr11 &amp; chr12 for 198 samples</p>
+<section id="runtimes" class="title-slide slide level1">
+<h1>Runtimes</h1>
+<p>chr11 &amp; chr12 for 150k samples</p>
 <ul>
 <li><strong>process_vcf</strong>: ~ 2000 cpu hours</li>
 <li><strong>coverage</strong>: ~ 680 cpu hours</li>
+<li><strong>sequences</strong>: still running</li>
 </ul>
 </section>
     </div>
