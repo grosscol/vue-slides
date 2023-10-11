@@ -1,2 +1,5 @@
 # Ignore Jekyll's build artifacts
 _site/*
+
+# Ignore built html for development inspection.
+*.html

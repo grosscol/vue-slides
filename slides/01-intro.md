@@ -1,13 +1,12 @@
 ---
 author: Colin Gross
-title: Scaling Freeze 10 Pipeline
-date: 2023-02-09
+title: Adding Data to Bravo
+date: 2023-10-12
 ---
 
-# Sizing Nodes & Processes
+# Adding eQTL Data to Bravo
 
-Rough evaluation and scaling of:
-
-  - Nextflow processes 
-  - SLURM partitions
-  - GCP instances.
+  - Processing (Nextflow)
+  - Importing  (Mongo)
+  - Serving    (Flask)
+  - Displaying (Vue)
