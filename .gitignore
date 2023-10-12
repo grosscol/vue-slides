@@ -3,3 +3,5 @@ _site/*
 
 # Ignore built html for development inspection.
 *.html
+
+*.swp
