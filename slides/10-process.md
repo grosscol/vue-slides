@@ -49,7 +49,8 @@ workflow {
 }
 ```
 
-### Named Workflow
+## Named Workflow
+
 ```nf
 workflow susie_eqtl {
   analysis_type = "susie"

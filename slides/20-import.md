@@ -19,6 +19,7 @@ Python import code
 ## Mongo Import Tool
 
 Supported formats:
+
 - mongo's bson format
 - tabular data import
 
