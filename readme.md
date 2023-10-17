@@ -1,7 +1,6 @@
 # Reveal Slides for Github Pages via Pandoc
 
-slides available at https://grosscol.github.io/slides-template
-
+slides available at https://grosscol.github.io/bravo-add-data-slides
 ## Making a New Presentation
 Clone and rename this repository.  Use your desired project name instead of `newname` below:
 ```sh
