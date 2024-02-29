@@ -4,14 +4,20 @@ title: Return to C++
 date: 2024-03-01
 ---
 
-# Fallibe Constructors
+# Modern Patterns and Guidelines
+  - C++ Core Guidlines (ISO Cpp)
+  - Google
+  - NASA's 10 Rules
+  - LLVM
+
+## Example: Fallibe Constructors
 E.g. needs to open a file or use a library(htslib) in the constructor
 
   - Might fail
   - Might leave a leaky mess
   - Forces caller to know about it and deal with it
 
-## Factory Pattern
+## Example: Factory Pattern
 LLVM project uses a static builder method that returns the thing or an Error object.
 Does not leave you with an unitialized object or a bad state.
 

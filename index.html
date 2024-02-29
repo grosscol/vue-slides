@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Colin Gross">
-  <meta name="dcterms.date" content="2023-10-12">
-  <title>Adding Data to Bravo</title>
+  <meta name="dcterms.date" content="2024-03-01">
+  <title>Return to C++</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -96,306 +96,206 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Adding Data to Bravo</h1>
+  <h1 class="title">Return to C++</h1>
   <p class="author">Colin Gross</p>
-  <p class="date">2023-10-12</p>
+  <p class="date">2024-03-01</p>
 </section>
 
-<section id="adding-eqtl-data-to-bravo" class="title-slide slide level1">
-<h1>Adding eQTL Data to Bravo</h1>
+<section id="getting-back-into-c" class="title-slide slide level1">
+<h1>Getting Back into C++</h1>
 <ul>
-<li>Processing (Nextflow)</li>
-<li>Importing (Mongo)</li>
-<li>Serving (Flask)</li>
-<li>Displaying (Vue)</li>
+<li>Bravo Data Prep tools</li>
+<li>Modern-ish C++</li>
+<li>CMake</li>
 </ul>
 </section>
 
 <section>
-<section id="processing-eqtl-data" class="title-slide slide level1">
-<h1>Processing eQTL Data</h1>
+<section id="c14-and-c17" class="title-slide slide level1">
+<h1>C++14 and C++17</h1>
+<p>New to me features</p>
+</section>
+<section id="uniform-initialization" class="slide level2">
+<h2>Uniform initialization</h2>
+<p>Old ways</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b<span class="op">=</span><span class="dv">3</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c<span class="op">(</span><span class="dv">4</span><span class="op">);</span></span></code></pre></div>
+<p>Uniform ways</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">{};</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b<span class="op">{</span><span class="dv">3</span><span class="op">};</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c<span class="op">{</span><span class="dv">4</span><span class="op">};</span></span></code></pre></div>
+</section>
+<section id="auto" class="slide level2">
+<h2>Auto</h2>
+<p>A keyword that used to be redundant.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> gen_numbers<span class="op">(){</span> <span class="co">/*...*/</span> <span class="op">}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(){</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// explicit type</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> x_numbers <span class="op">=</span> gen_numbers<span class="op">();</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// let the compiler figure it out</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> a_numbers <span class="op">=</span> gen_numbers<span class="op">();</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</section>
+<section id="stdfilesystem" class="slide level2">
+<h2>std::filesystem</h2>
+<p>Convenient way of building paths in the standard libarary.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include</span><span class="im">&lt;filesystem&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>filesystem<span class="bu">::</span>path<span class="op"> </span>dir<span class="op">{</span>TEST_DATA_DIR<span class="op">};</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>filesystem<span class="bu">::</span>path<span class="op"> </span>file<span class="op">{</span><span class="st">&quot;structvar_sample_input.vcf&quot;</span><span class="op">};</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>filesystem<span class="bu">::</span>path<span class="op"> </span>path<span class="op">{</span>test_data_dir <span class="op">/</span> test_data_file<span class="op">};</span></span></code></pre></div>
+</section>
+<section id="odds-and-ends" class="slide level2">
+<h2>Odds and ends</h2>
+<p>A keyword that used to be redundant.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Instead of char</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>byte<span class="op"> </span>foo<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">// A smarter thing that could be one of three types</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>variant<span class="op">&lt;</span>BCF_BT_INT32<span class="op">,</span> BCF_BT_INT16<span class="op">,</span> BCF_BT_INT8<span class="op">&gt;</span> fmt_value<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Ruby-ish namespaces</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> Foo<span class="op">::</span>Bar<span class="op">::</span>Baz <span class="op">{</span> <span class="co">/*...*/</span> <span class="op">}</span></span></code></pre></div>
+</section>
+<section id="stdmove" class="slide level2">
+<h2>std::move</h2>
+<blockquote>
+<p>std::move is used to indicate that an object t may be “moved from”, i.e. allowing the efficient transfer of resources from t to another object.</p>
+</blockquote>
 <ul>
-<li>What is present.</li>
-<li>How to integrate with existing data.</li>
-<li>Making a pipeline.</li>
+<li>Makes it possible to “steal” resources like streams or connections.</li>
+<li>Avoids a lot of uneccissary copies.</li>
+<li>Complilers will use it where appropriate.</li>
 </ul>
-</section>
-<section id="data-structure" class="slide level2">
-<h2>Data Structure</h2>
-<p>Wonderfully written readme describing the data and procees by which it was generated by Peter Orchard.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">==================</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Freeze 1RNA README</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">==================</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>This is freeze 1RNA for the TOPMed RNA-seq data, containing cis-eQTL analysis results for six tissues:</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Whole blood (N = 6,602)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Lung (N = 1,360)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>PBMC (N = 1,265)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>T cells (N = 368)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Nasal epithelial (N = 359)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Monocytes (N = 352)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ss">   * </span>Column descriptions:</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">      * </span>phenotype_id: gene identifier</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">      * </span>variant_id: genetic variant, in format {variant_chromosome}_{variant_position}_{variant_ref_allele}_{variant_alt_allele}</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">      * </span>pip: SuSiE PIP (essentially, the probability the variant is a causal one for this eQTL signal)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">      * </span>af: frequency of the alt allele</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">      * </span>cs_id: Credible set ID. cs_id + phenotype_id together uniquely identify a credible set. A credible set containing more than one genetic variant will span more than one line.</span></code></pre></div>
-</section>
-<section id="integration-with-exisiting-data" class="slide level2">
-<h2>Integration with Exisiting Data</h2>
-<p>incoming eqtl data (data/susie/PBMC.maf001.cs.txt):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>phenotype_id    variant_id      pip     af      cs_id</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ENSG00000151240.17      chr10_501718_G_T        0.98997444      0.78498024      1</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ENSG00000107929.14      chr10_800029_T_C        0.016404094     0.3806324       1</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ENSG00000107929.14      chr10_805438_T_G        0.18358973      0.38418972      1</span></code></pre></div>
-<p>existing gene data:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;chrom&quot;</span> <span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;start&quot;</span> <span class="fu">:</span> <span class="dv">11869</span><span class="fu">,</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;stop&quot;</span> <span class="fu">:</span> <span class="dv">14409</span><span class="fu">,</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;gene_id&quot;</span> <span class="fu">:</span> <span class="st">&quot;ENSG00000223972&quot;</span><span class="fu">,</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
-</section>
-<section id="working-out-processing" class="slide level2">
-<h2>Working Out Processing</h2>
-<ul>
-<li>Remove trailing version numbers from Ensemble gene ids (column 1)</li>
-<li>Add tissue origin column (from filename) as last column</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;BEGIN {FS=&quot;\t&quot;; OFS=FS}\</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">  (NR&gt;1) { sub(/\\.[[:digit:]]+$/,&quot;&quot;,$1); \</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">  print $0 OFS &quot;${tissue_type}&quot; }&#39;</span> <span class="va">${tissue_tsv}</span> <span class="dt">\</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span> <span class="va">${tissue_type}</span>.<span class="va">${analysis_type}</span>.tsv</span></code></pre></div>
-</section>
-<section id="making-a-nextflow-workflows" class="slide level2">
-<h2>Making a Nextflow Workflows</h2>
-<p>Nextflow V2 DSL organizes a workflow into smaller units of named workflows.</p>
-<pre class="nf"><code>workflow {
-  conditional_eqtl()
-  susie_eqtl()
-}</code></pre>
-</section>
-<section id="named-workflow" class="slide level2">
-<h2>Named Workflow</h2>
-<p>Named workflows are compositions of processes that are called like functions</p>
-<pre class="nf"><code>workflow susie_eqtl {
-  analysis_type = &quot;susie&quot;
-  susie_tsv     = channel.fromPath(&quot;${params.susie_eqtl_glob}&quot;)
-  susie_headers = channel.of(params.susie_fields).collect()
-  fields        = params.susie_fields
-  types         = params.susie_types
-
-  validate_header(susie_tsv, susie_headers)
-  munge_files(susie_tsv, analysis_type)
-  merge_files(munge_files.out.collect(), 
-              analysis_type, fields, types)
-}</code></pre>
-</section>
-<section id="processes" class="slide level2">
-<h2>Processes</h2>
-<p>Inputs and outputs with a defined script or program to run.</p>
-<pre class="nf"><code>process munge_files {
-  label &quot;highcpu&quot;
-
-  input:
-  file tissue_tsv
-  val analysis_type
-
-  output:
-  file &quot;*.tsv&quot;
-
-  shell:
-  tissue_type = tissue_tsv.getFileName().toString().tokenize(&quot;.&quot;)[0]
-  &#39;&#39;&#39;
-  awk &#39;BEGIN {FS=&quot;\t&quot;; OFS=FS}\
-    (NR&gt;1) { sub(/\\.[[:digit:]]+$/,&quot;&quot;,$1); \
-    print $0 OFS &quot;!{tissue_type}&quot; }&#39; !{tissue_tsv} &gt; !{tissue_type}.!{analysis_type}.tsv
-  &#39;&#39;&#39;
-}
-</code></pre>
 </section></section>
 <section>
-<section id="import" class="title-slide slide level1">
-<h1>Import</h1>
-<p>Store data in MongoDB that backs the API</p>
+<section id="cmake" class="title-slide slide level1">
+<h1>CMake</h1>
 <ul>
-<li>Python using pymongo</li>
-<li>Mongo utilities</li>
+<li>Build system</li>
+<li>Modules for common uses</li>
+<li>Widely adopted</li>
 </ul>
 </section>
-<section id="python-option" class="slide level2">
-<h2>Python Option</h2>
-<p>Previous imports were done via python. E.g. loading gene data</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode py"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> gene <span class="kw">in</span> read_gencode(gencode_file, [<span class="st">&#39;gene&#39;</span>]):</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        gene_id <span class="op">=</span> gene[<span class="st">&#39;gene_id&#39;</span>]</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> gene_id <span class="kw">in</span> canonical_transcripts:</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            gene[<span class="st">&#39;canonical_transcripts&#39;</span>] <span class="op">=</span> canonical_transcripts[gene_id]</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> gene_id <span class="kw">in</span> omim_annotations:</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            gene[<span class="st">&#39;omim_accession&#39;</span>] <span class="op">=</span> omim_annotations[gene_id][<span class="dv">0</span>]</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            gene[<span class="st">&#39;omim_description&#39;</span>] <span class="op">=</span> omim_annotations[gene_id][<span class="dv">1</span>]</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> gene_id <span class="kw">in</span> genenames:</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            gene[<span class="st">&#39;gene_name&#39;</span>] <span class="op">=</span> genenames[gene_id][<span class="dv">0</span>]</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            gene[<span class="st">&#39;full_gene_name&#39;</span>] <span class="op">=</span> genenames[gene_id][<span class="dv">1</span>]</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            gene[<span class="st">&#39;other_names&#39;</span>] <span class="op">=</span> genenames[gene_id][<span class="dv">2</span>]</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        mongo.db.genes.insert_one(gene)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    mongo.db.genes.create_indexes([pymongo.operations.IndexModel(key) <span class="cf">for</span> key <span class="kw">in</span> [<span class="st">&#39;gene_id&#39;</span>, <span class="st">&#39;gene_name&#39;</span>, <span class="st">&#39;other_names&#39;</span>, <span class="st">&#39;xstart&#39;</span>, <span class="st">&#39;xstop&#39;</span>]])</span></code></pre></div>
-</section>
-<section id="mongo-import-tool-option" class="slide level2">
-<h2>Mongo Import Tool Option</h2>
-<p>Supported formats:</p>
+<section id="replacing-cget" class="slide level2">
+<h2>Replacing Cget</h2>
 <ul>
-<li>mongo’s bson format</li>
-<li>tabular data import</li>
+<li>Fewer build dependencies</li>
+<li>Cmake modules cover use cases:
+<ul>
+<li>htslib</li>
+<li>libboost</li>
+</ul></li>
 </ul>
 </section>
-<section id="tabular-formating-consideration" class="slide level2">
-<h2>Tabular Formating consideration</h2>
-<p>Type specification can be added to and parsed from column headers.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>phenotype_id.string()   variant_id.string()     pip.double()    af.double()     cs_id.int32()   tissue.string()</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ENSG00000151240 chr10_483204_G_A        0.05126923      0.83288044      1       T_cell</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ENSG00000151240 chr10_499255_G_C        0.06409895      0.8342391       1       T_cell</span></code></pre></div>
+<section id="no-in-source-builds" class="slide level2">
+<h2>No In-Source Builds</h2>
+<p>Build artifacts no longer welcome amongst source files.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> ( <span class="dv">${CMAKE_SOURCE_DIR}</span> <span class="ot">STREQUAL</span> <span class="dv">${CMAKE_BINARY_DIR}</span> )</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">message</span>(<span class="ot">FATAL_ERROR</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;In-source builds not allowed.</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Please run from CMake from the build directory, or use -B flag.&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;After removing CMakeCache.txt (rm CMakeCache.txt)</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cd ./build</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cmake --build ..</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;### OR ###</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cmake -S . -B ./build</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cmake --build ./build&quot;</span>)</span></code></pre></div>
 </section>
-<section id="mongo-import-command" class="slide level2">
-<h2>Mongo Import Command</h2>
-<ul>
-<li>Independent of Bravo API app</li>
-<li>Pretty fast</li>
-<li>Can read from stdin (e.g pipe from s3)</li>
-<li>Simple for relatively flat data</li>
-</ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mongoimport</span> <span class="dt">\</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--host</span><span class="op">=</span><span class="st">&quot;localhost&quot;</span> <span class="at">--db</span><span class="op">=</span><span class="st">&quot;bravo&quot;</span> <span class="dt">\</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--type</span><span class="op">=</span><span class="st">&quot;tsv&quot;</span> <span class="at">--columnsHaveTypes</span>  <span class="at">--headerline</span> <span class="dt">\</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--parseGrace</span><span class="op">=</span>stop <span class="at">--collection</span><span class="op">=</span>eqtl_cond <span class="dt">\</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span><span class="op">=</span>result/all.cond.tsv </span></code></pre></div>
+<section id="getting-other-cmake-projects" class="slide level2">
+<h2>Getting other CMake Projects</h2>
+<p>Idioms for getting other cmake projects.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  boost</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  GIT_REPOSITORY https://github.com/boostorg/boost.git</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  GIT_SHALLOW <span class="ot">TRUE</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  GIT_TAG boost-<span class="dt">1.80.0</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  googletest</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  URL https://github.com/google/googletest/archive/<span class="dt">0359</span>...d395.zip</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</section>
+<section id="building-htslib" class="slide level2">
+<h2>Building htslib</h2>
+<p>Not a cmake project (uses make and autoconf)</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ExternalProject_Add</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  htslib</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  PREFIX <span class="dv">${htslib_PREFIX}</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  URL https://github.com/samtools/htslib/.../htslib-<span class="dt">1.19.1</span>.tar.bz2</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  CONFIGURE_COMMAND autoreconf -i &amp;&amp; \</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    ./configure --without-libdeflate --prefix=<span class="dv">${htslib_PREFIX}</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  BUILD_COMMAND <span class="dv">${MAKE_COMMAND}</span> lib-static</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  INSTALL_COMMAND <span class="dv">${MAKE_COMMAND}</span> \</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    install prefix=<span class="dv">${htslib_INSTALL}</span></span></code></pre></div>
+</section>
+<section id="finding-system-libs" class="slide level2">
+<h2>Finding System Libs</h2>
+<p>The ones we need already have modules maintained by CMake.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindZLIB)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindBZip2)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindLibLZMA)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindCURL)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindOpenSSL)</span></code></pre></div>
 </section></section>
 <section>
-<section id="serving-eqtl-data" class="title-slide slide level1">
-<h1>Serving eQTL Data</h1>
-<p>Emit data from Bravo API</p>
-</section>
-<section id="flask-endpoint" class="slide level2">
-<h2>Flask Endpoint</h2>
-<p>Put eqtl endpoints in a blueprint and routing is done via decorator</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode py"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bravo_api/blueprints/eqtl.py</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>bp <span class="op">=</span> Blueprint(<span class="st">&#39;eqtl&#39;</span>, <span class="va">__name__</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">@bp.route</span>(<span class="st">&#39;/eqtl/susie&#39;</span>, methods<span class="op">=</span>[<span class="st">&#39;GET&#39;</span>])</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_susie(args):</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> susie(args[<span class="st">&#39;gene&#39;</span>])</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> make_response(jsonify(result))</span></code></pre></div>
-</section>
-<section id="validate-parameters" class="slide level2">
-<h2>Validate parameters</h2>
-<p>The marshmallow package handles arg validation</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode py"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bravo_api/blueprints/eqtl.py</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>eqtl_argmap <span class="op">=</span> {</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;gene&#39;</span>: fields.Str(</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      required<span class="op">=</span><span class="va">True</span>, validate<span class="op">=</span><span class="kw">lambda</span> x: <span class="bu">len</span>(x) <span class="op">&gt;</span> <span class="dv">0</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>       error_messages<span class="op">=</span>{<span class="st">&#39;validator_failed&#39;</span>: <span class="st">&#39;Value must be a non-empty string.&#39;</span>})</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode py"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bravo_api/blueprints/eqtl.py</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">@bp.route</span>(<span class="st">&#39;/eqtl/susie&#39;</span>, methods<span class="op">=</span>[<span class="st">&#39;GET&#39;</span>])</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">@parser.use_args</span>(eqtl_argmap, location<span class="op">=</span><span class="st">&#39;query&#39;</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_susie(args):</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> susie(args[<span class="st">&#39;gene&#39;</span>])</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> make_response(jsonify(result))</span></code></pre></div>
-</section>
-<section id="query-mongo" class="slide level2">
-<h2>Query Mongo</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode py"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bravo_api/blueprints/eqtl.py</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    pipeline <span class="op">=</span> [</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&#39;$match&#39;</span>: {<span class="st">&#39;gene_name&#39;</span>: gene_name}},</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&#39;$lookup&#39;</span>: {<span class="st">&#39;from&#39;</span>: <span class="st">&quot;eqtl_susie&quot;</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&#39;localField&#39;</span>: <span class="st">&quot;gene_id&quot;</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&#39;foreignField&#39;</span>: <span class="st">&quot;phenotype_id&quot;</span>,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&#39;as&#39;</span>: <span class="st">&quot;eqtls&quot;</span>}},</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        {<span class="st">&#39;$project&#39;</span>: {<span class="st">&#39;_id&#39;</span>: <span class="va">False</span>, <span class="st">&#39;eqtls._id&#39;</span>: <span class="va">False</span>}}</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    ]</span></code></pre></div>
-</section>
-<section id="handle-data-absent" class="slide level2">
-<h2>Handle data absent</h2>
-<p>Avoid 500 errors by avoiding <code>None</code> and returning expected type.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode py"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bravo_api/blueprints/eqtl.py</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> current_app.mmongo.db.genes.aggregate(pipeline)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    cursor.limit <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    answer <span class="op">=</span> <span class="bu">next</span>(cursor, <span class="va">None</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> answer <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> []</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> answer[<span class="st">&#39;eqtls&#39;</span>]</span></code></pre></div>
-</section>
-<section id="auth-required" class="slide level2">
-<h2>Auth required</h2>
-<p>Indicating authed session is requied for all routes in the blueprint</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode py"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bravo_api/__init__.py</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bravo_api.blueprints.eqtl <span class="im">import</span> eqtl</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_app(test_config<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Protect data endpoint blueprints</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    eqtl.bp.before_request(auth_routes.agreement_required)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Register and set prefix for blueprint&#39;s routes</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    app.register_blueprint(eqtl.bp, url_prefix<span class="op">=</span><span class="st">&#39;/ui&#39;</span>)</span></code></pre></div>
-</section></section>
-<section>
-<section id="displaying-eqtl-data" class="title-slide slide level1">
-<h1>Displaying eQTL Data</h1>
-<p>Considered questions that users want to answer</p>
+<section id="modern-patterns-and-guidelines" class="title-slide slide level1">
+<h1>Modern Patterns and Guidelines</h1>
 <ul>
-<li>How many eQTLs?</li>
-<li>How strong is the signal in the evidence?</li>
-<li>How was the analysis done?</li>
+<li>C++ Core Guidlines (ISO Cpp)</li>
+<li>Google</li>
+<li>NASA’s 10 Rules</li>
+<li>LLVM</li>
 </ul>
 </section>
-<section id="encapsulate-data-visualization-in-a-vue-component." class="slide level2">
-<h2>Encapsulate Data Visualization in a Vue Component.</h2>
-<p>Table with information about each eQTL</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;child-component&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;div</span> <span class="er">ref</span><span class="ot">=</span><span class="st">&quot;eqtltable&quot;</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;table-sm&quot;</span><span class="kw">&gt;&lt;/div&gt;</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;script&gt;</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> Tabulator <span class="im">from</span> <span class="st">&#39;tabulator-tables&#39;</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a> <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;EqtlSusieTable&quot;</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/script&gt;</span></span></code></pre></div>
+<section id="example-fallibe-constructors" class="slide level2">
+<h2>Example: Fallibe Constructors</h2>
+<p>E.g. needs to open a file or use a library(htslib) in the constructor</p>
+<ul>
+<li>Might fail</li>
+<li>Might leave a leaky mess</li>
+<li>Forces caller to know about it and deal with it</li>
+</ul>
 </section>
-<section id="description-in-plain-html-as-a-component" class="slide level2">
-<h2>Description in plain HTML as a Component</h2>
-<p>Used <code>pandoc</code> to convert Peter’s readme to HTML.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a> <span class="kw">&lt;h5</span> <span class="er">id</span><span class="ot">=</span><span class="st">&quot;cis-eqtlsusie&quot;</span><span class="kw">&gt;</span>Cis-eQTL/SuSiE<span class="kw">&lt;/h5&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>SuSiE fine-mapping results (using SuSiE [3]...<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>By default the SNP posterior inclusion probabilities....<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h6</span> <span class="er">id</span><span class="ot">=</span><span class="st">&quot;column-descriptions&quot;</span><span class="kw">&gt;</span>Column descriptions:<span class="kw">&lt;/h6&gt;</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;ul&gt;</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;&lt;strong&gt;</span>variant_id:<span class="kw">&lt;/strong&gt;</span> genetic variant, in format ...<span class="kw">&lt;/li&gt;</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;&lt;strong&gt;</span>pip:<span class="kw">&lt;/strong&gt;</span> SuSiE PIP (the probability the ...<span class="kw">&lt;/li&gt;</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/ul&gt;</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;script&gt;</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;EqtlTableDescription&quot;</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/script&gt;</span></span></code></pre></div>
+<section id="example-factory-pattern" class="slide level2">
+<h2>Example: Factory Pattern</h2>
+<p>LLVM project uses a static builder method that returns the thing or an Error object. Does not leave you with an unitialized object or a bad state.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Reader <span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">static</span> Expected<span class="op">&lt;</span>Foo<span class="op">&gt;</span> Create<span class="op">(</span>path P<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    Error Err <span class="op">=</span> Error<span class="op">::</span>success<span class="op">();</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    Foo Reader<span class="op">{</span>P<span class="op">,</span> Err<span class="op">};</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>Err<span class="op">)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="bu">std::</span>move<span class="op">(</span>Err<span class="op">);</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">std::</span>move<span class="op">(</span>F<span class="op">);</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  Foo<span class="op">(</span>path P<span class="op">,</span> Error <span class="op">&amp;</span>Err<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* check and reset Err</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">       Acquire resources to build object. */</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 </section>
-<section id="compose-components." class="slide level2">
-<h2>Compose Components.</h2>
-<div class="sourceCode" id="cb19"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;col-md-5&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;EqtlSusieTable/&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;col-md-5&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;EqtlCondTable/&gt;</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;col-md-11&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;EqtlTableDescription/&gt;</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<section id="another-dependency" class="slide level2">
+<h2>Another Dependency?</h2>
+<p>Would need the LLVM support libary which can be <a href="https://llvm.org/docs/CMake.html#embedding-llvm-in-your-project">embedded</a></p>
+<blockquote>
+<p>From LLVM 3.5 onwards the CMake build system exports LLVM libraries as importable CMake targets.</p>
+</blockquote>
+<p>Small build config footprint.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># llvmorg-17.0.6</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    llvm</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    GIT_REPOSITORY https://github.com/llvm/llvm-project.git</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    GIT_TAG bab01aead7d7a34436bc8e1639b90227374f079e </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    GIT_SHALLOW <span class="ot">TRUE</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    SOURCE_SUBDIR llvm</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">llvm_map_components_to_libnames</span>(<span class="dv">LLVM_LIBRARIES</span> support)</span></code></pre></div>
 </section></section>
 <section id="end-of-slides" class="title-slide slide level1">
 <h1>End of Slides</h1>
