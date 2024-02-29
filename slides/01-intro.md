@@ -1,12 +1,10 @@
 ---
 author: Colin Gross
-title: Adding Data to Bravo
-date: 2023-10-12
+title: Return to C++
+date: 2024-03-01
 ---
 
-# Adding eQTL Data to Bravo
-
-  - Processing (Nextflow)
-  - Importing  (Mongo)
-  - Serving    (Flask)
-  - Displaying (Vue)
+# Getting Back into C++
+  - Bravo Data Prep tools
+  - Modern-ish C++
+  - CMake
