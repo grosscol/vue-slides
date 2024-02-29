@@ -48,8 +48,16 @@ std::filesystem::path file{"structvar_sample_input.vcf"};
 std::filesystem::path path{test_data_dir / test_data_file};
 ```
 
+## std::move
+
+> std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
+
+- Makes it possible to "steal" resources like streams or connections.
+- Avoids a lot of uneccissary copies.
+- Complilers will use it where appropriate.
+
 ## Odds and ends
-A keyword that used to be redundant.
+Small things that caught my eye
 
 ```c++
 // Instead of char
@@ -61,11 +69,3 @@ std::variant<BCF_BT_INT32, BCF_BT_INT16, BCF_BT_INT8> fmt_value;
 // Ruby-ish namespaces
 namespace Foo::Bar::Baz { /*...*/ }
 ```
-
-## std::move
-
-> std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
-
-- Makes it possible to "steal" resources like streams or connections.
-- Avoids a lot of uneccissary copies.
-- Complilers will use it where appropriate.
