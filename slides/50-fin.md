@@ -1,7 +1,7 @@
 ---
 author: Colin Gross
-title: Return to C++
-date: 2024-02-29
+title: Vue UI Framework
+date: 2024-10-10
 ---
 
 # End of Slides

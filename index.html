@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Colin Gross">
-  <meta name="dcterms.date" content="2024-02-29">
-  <title>Return to C++</title>
+  <meta name="dcterms.date" content="2024-10-10">
+  <title>Vue UI Framework</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -14,9 +14,9 @@
   <style>
     /* Hack to override reveal styling */
     :root:root {
-      --r-heading1-size: 2.2em;
-      --r-heading2-size: 1.8em;
-      --r-heading3-size: 1.5em;
+      --r-heading1-size: 2.0em;
+      --r-heading2-size: 1.6em;
+      --r-heading3-size: 1.3em;
     }
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -96,206 +96,269 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Return to C++</h1>
+  <h1 class="title">Vue UI Framework</h1>
   <p class="author">Colin Gross</p>
-  <p class="date">2024-02-29</p>
+  <p class="date">2024-10-10</p>
 </section>
 
-<section id="getting-back-into-c" class="title-slide slide level1">
-<h1>Getting Back into C++</h1>
+<section id="vue-web-ui-framework" class="title-slide slide level1">
+<h1>Vue Web UI Framework</h1>
 <ul>
-<li>Bravo Data Prep tools</li>
-<li>Modern-ish C++</li>
-<li>CMake</li>
+<li>JavaScript</li>
+<li>Component Based</li>
 </ul>
 </section>
 
 <section>
-<section id="c14-and-c17" class="title-slide slide level1">
-<h1>C++14 and C++17</h1>
-<p>New to me features</p>
+<section id="its-javascript" class="title-slide slide level1">
+<h1>It’s Javascript</h1>
+<p>There’s some good, bad, and ugly.</p>
 </section>
-<section id="uniform-initialization" class="slide level2">
-<h2>Uniform initialization</h2>
-<p>Old ways</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b<span class="op">=</span><span class="dv">3</span><span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c<span class="op">(</span><span class="dv">4</span><span class="op">);</span></span></code></pre></div>
-<p>Uniform ways</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">{};</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b<span class="op">{</span><span class="dv">3</span><span class="op">};</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c<span class="op">{</span><span class="dv">4</span><span class="op">};</span></span></code></pre></div>
-</section>
-<section id="auto" class="slide level2">
-<h2>Auto</h2>
-<p>A keyword that used to be redundant.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> gen_numbers<span class="op">(){</span> <span class="co">/*...*/</span> <span class="op">}</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(){</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// explicit type</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> x_numbers <span class="op">=</span> gen_numbers<span class="op">();</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// let the compiler figure it out</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> a_numbers <span class="op">=</span> gen_numbers<span class="op">();</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</section>
-<section id="stdfilesystem" class="slide level2">
-<h2>std::filesystem</h2>
-<p>Convenient way of building paths in the standard libarary.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include</span><span class="im">&lt;filesystem&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>filesystem<span class="bu">::</span>path<span class="op"> </span>dir<span class="op">{</span>TEST_DATA_DIR<span class="op">};</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>filesystem<span class="bu">::</span>path<span class="op"> </span>file<span class="op">{</span><span class="st">&quot;structvar_sample_input.vcf&quot;</span><span class="op">};</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>filesystem<span class="bu">::</span>path<span class="op"> </span>path<span class="op">{</span>test_data_dir <span class="op">/</span> test_data_file<span class="op">};</span></span></code></pre></div>
-</section>
-<section id="stdmove" class="slide level2">
-<h2>std::move</h2>
-<blockquote>
-<p>std::move is used to indicate that an object t may be “moved from”, i.e. allowing the efficient transfer of resources from t to another object.</p>
-</blockquote>
+<section id="the-good" class="slide level2">
+<h2>The Good</h2>
 <ul>
-<li>Makes it possible to “steal” resources like streams or connections.</li>
-<li>Avoids a lot of uneccissary copies.</li>
-<li>Complilers will use it where appropriate.</li>
+<li>Runs on the client</li>
+<li>Is easy to write</li>
+<li>Has many libraries</li>
+<li>Asynchronous by default</li>
 </ul>
 </section>
-<section id="odds-and-ends" class="slide level2">
-<h2>Odds and ends</h2>
-<p>Small things that caught my eye</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Instead of char</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>byte<span class="op"> </span>foo<span class="op">;</span></span>
+<section id="the-bad" class="slide level2">
+<h2>The Bad</h2>
+<ul>
+<li>Libraries change frequently</li>
+<li>Meager standard library</li>
+<li>Asynchronous by default</li>
+</ul>
+</section>
+<section id="the-ugly" class="slide level2">
+<h2>The Ugly</h2>
+<p>Javascript will <del>helpfully</del> <em>malicously</em> cast until it gets <em>something</em> that runs.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="dv">12</span> <span class="op">==</span> <span class="st">&quot;12&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">10</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dv">11</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="dv">1</span> <span class="op">+</span> <span class="st">&quot;10&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;110&#39;</span></span></code></pre></div>
+</section>
+<section id="the-ugly-1" class="slide level2">
+<h2>The Ugly</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">typeof</span>(<span class="kw">NaN</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;number&#39;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">NaN</span> <span class="op">===</span> <span class="kw">NaN</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+</section>
+<section id="the-ugly-2" class="slide level2">
+<h2>The Ugly</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">null</span> <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">null</span> <span class="op">==</span> <span class="kw">false</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">null</span> <span class="op">===</span> <span class="kw">false</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="kw">null</span> <span class="op">&gt;=</span> <span class="kw">false</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+</section>
+<section id="the-ugly-3" class="slide level2">
+<h2>The Ugly</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> {} <span class="op">+</span> []   <span class="co">// 0</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">// A smarter thing that could be one of three types</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>variant<span class="op">&lt;</span>BCF_BT_INT32<span class="op">,</span> BCF_BT_INT16<span class="op">,</span> BCF_BT_INT8<span class="op">&gt;</span> fmt_value<span class="op">;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Ruby-ish namespaces</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> Foo<span class="op">::</span>Bar<span class="op">::</span>Baz <span class="op">{</span> <span class="co">/*...*/</span> <span class="op">}</span></span></code></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> [] <span class="op">+</span> {}   <span class="co">// &#39;[object Object]&#39;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;[object Object]&#39;</span></span></code></pre></div>
 </section></section>
 <section>
-<section id="cmake" class="title-slide slide level1">
-<h1>CMake</h1>
+<section id="vue-components" class="title-slide slide level1">
+<h1>Vue Components</h1>
 <ul>
-<li>Build system</li>
-<li>Modules for common uses</li>
-<li>Widely adopted</li>
+<li>Modulular</li>
+<li>Composable</li>
+<li>Lifecycle Hooks</li>
 </ul>
 </section>
-<section id="replacing-cget" class="slide level2">
-<h2>Replacing Cget</h2>
-<ul>
-<li>Fewer build dependencies</li>
-<li>Cmake modules cover use cases:
-<ul>
-<li>htslib</li>
-<li>libboost</li>
-</ul></li>
-</ul>
+<section id="anatomy-of-a-component" class="slide level2">
+<h2>Anatomy of a Component</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">&lt;!-- HTML goes here --&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>script<span class="op">&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> <span class="co">// Javascript goes here</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;/</span>script<span class="op">&gt;</span></span></code></pre></div>
 </section>
-<section id="no-in-source-builds" class="slide level2">
-<h2>No In-Source Builds</h2>
-<p>Build artifacts no longer welcome amongst source files.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> ( <span class="dv">${CMAKE_SOURCE_DIR}</span> <span class="ot">STREQUAL</span> <span class="dv">${CMAKE_BINARY_DIR}</span> )</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">message</span>(<span class="ot">FATAL_ERROR</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;In-source builds not allowed.</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Please run from CMake from the build directory, or use -B flag.&quot;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;After removing CMakeCache.txt (rm CMakeCache.txt)</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cd ./build</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cmake --build ..</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;### OR ###</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cmake -S . -B ./build</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot; cmake --build ./build&quot;</span>)</span></code></pre></div>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;button</span> <span class="er">@click</span><span class="ot">=</span><span class="st">&quot;do_stuff&quot;</span><span class="kw">&gt;</span>Gadget {{count}}<span class="kw">&lt;/button&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>script<span class="op">&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;gadgetButton&quot;</span><span class="op">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data</span>() {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">count</span><span class="op">:</span> <span class="dv">0</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">methods</span><span class="op">:</span> {</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">do_stuff</span><span class="op">:</span> <span class="kw">function</span>() {</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="at">count</span><span class="op">++</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;/</span>script<span class="op">&gt;</span></span></code></pre></div>
 </section>
-<section id="getting-other-cmake-projects" class="slide level2">
-<h2>Getting other CMake Projects</h2>
-<p>Idioms for getting other cmake projects.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  boost</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  GIT_REPOSITORY https://github.com/boostorg/boost.git</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  GIT_SHALLOW <span class="ot">TRUE</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  GIT_TAG boost-<span class="dt">1.80.0</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  googletest</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  URL https://github.com/google/googletest/archive/<span class="dt">0359</span>...d395.zip</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-</section>
-<section id="building-htslib" class="slide level2">
-<h2>Building htslib</h2>
-<p>Not a cmake project (uses make and autoconf)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ExternalProject_Add</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  htslib</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  PREFIX <span class="dv">${htslib_PREFIX}</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  URL https://github.com/samtools/htslib/.../htslib-<span class="dt">1.19.1</span>.tar.bz2</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  CONFIGURE_COMMAND autoreconf -i &amp;&amp; \</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    ./configure --without-libdeflate --prefix=<span class="dv">${htslib_PREFIX}</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  BUILD_COMMAND <span class="dv">${MAKE_COMMAND}</span> lib-static</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  INSTALL_COMMAND <span class="dv">${MAKE_COMMAND}</span> \</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    install prefix=<span class="dv">${htslib_INSTALL}</span></span></code></pre></div>
-</section>
-<section id="finding-system-libs" class="slide level2">
-<h2>Finding System Libs</h2>
-<p>The ones we need already have modules maintained by CMake.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindZLIB)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindBZip2)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindLibLZMA)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindCURL)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(FindOpenSSL)</span></code></pre></div>
+<section id="composable" class="slide level2">
+<h2>Composable</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>Dashboard<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;gadgetButton/&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;gadgetTable/&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>script<span class="op">&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> myComponent <span class="im">from</span> <span class="st">&#39;@/components/gadgetButton.vue&#39;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> myComponent <span class="im">from</span> <span class="st">&#39;@/components/gadgetVisual.vue&#39;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;gadgetDashboard&quot;</span><span class="op">,</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">components</span><span class="op">:</span> [gadgetButton<span class="op">,</span> gadgetTable]</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;/</span>script<span class="op">&gt;</span></span></code></pre></div>
 </section></section>
 <section>
-<section id="modern-patterns-and-guidelines" class="title-slide slide level1">
-<h1>Modern Patterns and Guidelines</h1>
+<section id="vue-passing-data" class="title-slide slide level1">
+<h1>Vue Passing Data</h1>
 <ul>
-<li>C++ Core Guidlines (ISO Cpp)</li>
-<li>Google</li>
-<li>NASA’s 10 Rules</li>
-<li>LLVM</li>
+<li>props</li>
+<li>provide/inject</li>
+<li>emit</li>
 </ul>
 </section>
-<section id="example-fallibe-constructors" class="slide level2">
-<h2>Example: Fallibe Constructors</h2>
-<p>E.g. needs to open a file or use a library(htslib) in the constructor</p>
-<ul>
-<li>Might fail</li>
-<li>Might leave a leaky mess</li>
-<li>Forces caller to know about it and deal with it</li>
-</ul>
+<section id="passing-props" class="slide level2">
+<h2>Passing Props</h2>
+<p>Pass data into child components as attribute</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">id</span><span class="ot">=</span><span class="st">&quot;dashboard&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;GeneInfo</span> <span class="er">:geneData</span><span class="ot">=</span><span class="st">&quot;geneData&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span>{</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;GeneDashboard&quot;</span><span class="op">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">methods</span><span class="op">:</span> {</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">loadGene</span><span class="op">:</span> <span class="kw">function</span>() {</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      axios</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">get</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">api</span><span class="sc">}</span><span class="vs">/genes/api/</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">geneId</span><span class="sc">}</span><span class="vs">`</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">then</span>( response <span class="kw">=&gt;</span> { <span class="kw">this</span><span class="op">.</span><span class="at">geneData</span> <span class="op">=</span> response<span class="op">.</span><span class="at">data</span> })</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
 </section>
-<section id="example-factory-pattern" class="slide level2">
-<h2>Example: Factory Pattern</h2>
-<p>LLVM project uses a static builder method that returns the thing or an Error object. Does not leave you with an unitialized object or a bad state.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Reader <span class="op">{</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">static</span> Expected<span class="op">&lt;</span>Foo<span class="op">&gt;</span> Create<span class="op">(</span>path P<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    Error Err <span class="op">=</span> Error<span class="op">::</span>success<span class="op">();</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    Foo Reader<span class="op">{</span>P<span class="op">,</span> Err<span class="op">};</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>Err<span class="op">)</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="bu">std::</span>move<span class="op">(</span>Err<span class="op">);</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">std::</span>move<span class="op">(</span>F<span class="op">);</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  Foo<span class="op">(</span>path P<span class="op">,</span> Error <span class="op">&amp;</span>Err<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* check and reset Err</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">       Acquire resources to build object. */</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<section id="using-props" class="slide level2">
+<h2>Using Props</h2>
+<p>Child component can use data passed in.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- GeneInfo component --&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;child-component&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;h1</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;display-5&quot;</span><span class="kw">&gt;&lt;i&gt;</span>{{geneData.gene_name}}<span class="kw">&lt;/i&gt;&lt;/h1&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;h6&gt;</span>{{geneData.full_gene_name}}<span class="kw">&lt;/h6&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;GeneInfo&quot;</span><span class="op">,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">props</span><span class="op">:</span> {</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">geneData</span><span class="op">:</span> {</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">type</span><span class="op">:</span> <span class="bu">Object</span><span class="op">,</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">default</span><span class="op">:</span> <span class="kw">function</span>() {</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>          <span class="dt">full_gene_name</span><span class="op">:</span> <span class="st">&quot;&quot;</span><span class="op">,</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>          <span class="dt">gene_name</span><span class="op">:</span> <span class="st">&quot;&quot;</span><span class="op">,</span></span></code></pre></div>
 </section>
-<section id="another-dependency" class="slide level2">
-<h2>Another Dependency?</h2>
-<p>Would need the LLVM support libary which can be <a href="https://llvm.org/docs/CMake.html#embedding-llvm-in-your-project">embedded</a></p>
-<blockquote>
-<p>From LLVM 3.5 onwards the CMake build system exports LLVM libraries as importable CMake targets.</p>
-</blockquote>
-<p>Small build config footprint.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># llvmorg-17.0.6</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    llvm</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    GIT_REPOSITORY https://github.com/llvm/llvm-project.git</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    GIT_TAG bab01aead7d7a34436bc8e1639b90227374f079e </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    GIT_SHALLOW <span class="ot">TRUE</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    SOURCE_SUBDIR llvm</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">llvm_map_components_to_libnames</span>(<span class="dv">LLVM_LIBRARIES</span> support)</span></code></pre></div>
+<section id="provide" class="slide level2">
+<h2>Provide</h2>
+<p>Provided values can be acceessed by decendants at and depth</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>script<span class="op">&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&#39;GeneDashboard&#39;</span><span class="op">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">provide</span><span class="op">:</span> <span class="kw">function</span>() {</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">chrom</span><span class="op">:</span> <span class="kw">this</span><span class="op">.</span><span class="at">chrom</span><span class="op">,</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">start</span><span class="op">:</span> <span class="kw">this</span><span class="op">.</span><span class="at">start</span><span class="op">,</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">stop</span><span class="op">:</span> <span class="kw">this</span><span class="op">.</span><span class="at">stop</span><span class="op">,</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;/</span>script<span class="op">&gt;</span></span></code></pre></div>
+</section>
+<section id="inject" class="slide level2">
+<h2>Inject</h2>
+<p>Injected data provided by <em>some</em> ancestor</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;child-component&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;h6&gt;</span>{{geneData.full_gene_name}}<span class="kw">&lt;/h6&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      Region: <span class="kw">&lt;span&gt;</span>{{chrom}}:{{start}}-{{stop}}<span class="kw">&lt;/span&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;GeneInfo&quot;</span><span class="op">,</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">inject</span><span class="op">:</span> {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">chrom</span><span class="op">:</span> {<span class="cf">default</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">start</span><span class="op">:</span> {<span class="cf">default</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">stop</span><span class="op">:</span> {<span class="cf">default</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">,</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section>
+<section id="emit" class="slide level2">
+<h2>Emit</h2>
+<p>Events passed to ancestors</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a> <span class="co">&lt;!-- Search bar context --&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;AutoComplete</span> <span class="er">v-on:suggestionSelect</span><span class="ot">=</span><span class="st">&quot;doSuggest&quot;</span><span class="kw">&gt;&lt;/AutoComplete&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/template&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>script<span class="op">&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">methods</span><span class="op">:</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">doSuggest</span>(suggestion){</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> resultTicket <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">suggestToResultTicket</span>(suggestion)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(resultTicket<span class="op">.</span><span class="at">endpoint</span> <span class="op">===</span> <span class="st">&quot;notfound&quot;</span>){</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="fu">$emit</span>(<span class="st">&quot;noSearchResults&quot;</span><span class="op">,</span> resultTicket<span class="op">.</span><span class="at">query</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section></section>
+<section>
+<section id="vue-lifecycle-hooks" class="title-slide slide level1">
+<h1>Vue Lifecycle Hooks</h1>
+<style>
+  img[src$="#lcycle"]{
+    width: 250px;
+    height: 500px;
+    }
+</style>
+<p><a href="https://vuejs.org/guide/essentials/lifecycle.html">Vue Lifecycle</a></p>
+<p><img data-src="https://vuejs.org/assets/lifecycle.MuZLBFAS.png#lcycle" /></p>
+</section>
+<section id="exmaple-registering-events" class="slide level2">
+<h2>Exmaple: Registering Events</h2>
+<p>export default { name: SeqDepth, mounted: function() { window.addEventListener(“resize”, this.debouncedDraw); }, unmounted: function() { window.removeEventListener(“resize”, this.debouncedDraw); } }</p>
+</section>
+<section id="example-loading-data" class="slide level2">
+<h2>Example: Loading Data</h2>
+<p>When the component gets added to the document, then load the data for it.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> SeqDepth<span class="op">,</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">methods</span><span class="op">:</span> {</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">load</span><span class="op">:</span> <span class="kw">function</span>(){</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> axios</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">post</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">api</span><span class="sc">}</span><span class="vs">/chunked-coverage`</span><span class="op">,</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>          {<span class="dt">chrom</span><span class="op">:</span> chrom<span class="op">,</span> <span class="dt">start</span><span class="op">:</span> start<span class="op">,</span> <span class="dt">stop</span><span class="op">:</span> stop<span class="op">,</span> <span class="dt">continue_from</span><span class="op">:</span> continue_from})</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">then</span>( resp <span class="kw">=&gt;</span> { <span class="kw">this</span><span class="op">.</span><span class="at">cov_data</span><span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>resp<span class="op">.</span><span class="at">data</span><span class="op">.</span><span class="at">coverage</span>)})</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">mounted</span><span class="op">:</span> <span class="kw">function</span>() {</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ((<span class="kw">this</span><span class="op">.</span><span class="at">chrom</span> <span class="op">!=</span> <span class="kw">null</span>) <span class="op">&amp;&amp;</span> (<span class="kw">this</span><span class="op">.</span><span class="at">start</span> <span class="op">!=</span> <span class="kw">null</span>) <span class="op">&amp;&amp;</span> (<span class="kw">this</span><span class="op">.</span><span class="at">stop</span> <span class="op">!=</span> <span class="kw">null</span>)) {</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">load</span>()<span class="op">;</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </section></section>
 <section id="end-of-slides" class="title-slide slide level1">
 <h1>End of Slides</h1>
